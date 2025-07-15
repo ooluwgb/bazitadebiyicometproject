@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 vpc_endpoints = {
   ecr_api = {
     service             = "ecr.api"
@@ -94,4 +93,4 @@ variable "gateway_endpoints" {
   }))
   default = {}
 }
->>>>>>> ea1e29c (feat: add standalone VPC endpoint resources)
+
