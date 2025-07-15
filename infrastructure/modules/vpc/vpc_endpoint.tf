@@ -1,4 +1,4 @@
-resource "aws_vpc_endpoint" "this" {
+resource "aws_vpc_endpoint" "interface" {
   for_each = var.vpc_endpoints
 
   vpc_id            = module.vpc.vpc_id
