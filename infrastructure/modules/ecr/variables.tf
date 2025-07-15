@@ -25,3 +25,10 @@ variable "tags" {
   type        = map(string)
   default     = {}
 }
+
+variable "name" {
+  description = "The name of the ECR repository"
+  type        = string
+  default     = null
+  
+}

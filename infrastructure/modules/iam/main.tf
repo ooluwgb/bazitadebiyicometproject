@@ -1,3 +1,45 @@
+##this is cool, but it should not be in the module, here in the modules I would don something like the below
+#maybe make a small directory here to handle IAM policy creation??
+##ALL the ready made roles should be in #app-hello-world directory
+##also fix the output to be the arn of the role that's being created here
+
+# resource "aws_iam_role" "this" {
+#   name = "var.name"
+
+#   assume_role_policy = jsonencode({
+#     Version = "2012-10-17"
+#     Statement = [
+#       {
+#         Effect = "Allow"
+#         Principal = {
+#           Service = var.assume_role_service // e.g., "eks.amazonaws.com"
+#         }
+#         Action = "sts:AssumeRole"
+#       }
+#     ]
+#   })
+
+#   tags = merge(var.tags, {
+#     Name = "${var.cluster_name}-eks-cluster-role"
+#   })
+# }
+
+# resource "aws_iam_role_policy" "this" {
+#   name = "${var.cluster_name}-eks-cluster-policy"
+
+#   role   = aws_iam_role.eks_cluster.name
+#   policy = //have chatgpt create a customizable policy based on the cluster requirements and put here
+
+#   tags = merge(var.tags, {
+#     Name = "${var.cluster_name}-eks-cluster-policy"
+#   })
+# }
+
+# resource "aws_iam_role_policy_attachment" "eks_cluster_policy" {
+#   role       = aws_iam_role.eks_cluster.name
+#   policy_arn = data.aws_iam_policy.eks_cluster_policy.arn
+# }
+
 # --- EKS Cluster Role ---
 resource "aws_iam_role" "eks_cluster" {
   name = "${var.cluster_name}-eks-cluster-role"
@@ -22,7 +64,7 @@ resource "aws_iam_role" "eks_cluster" {
 
 resource "aws_iam_role_policy_attachment" "eks_cluster_policy" {
   role       = aws_iam_role.eks_cluster.name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
+  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"// use a data source to get the policy arn, never hardcode it
 }
 
 # --- Node Group Role ---
@@ -115,3 +157,6 @@ resource "aws_iam_role_policy_attachment" "irsa_policy_attachment" {
 }
 
 data "aws_region" "current" {}
+
+
+#it's code is being repeated here

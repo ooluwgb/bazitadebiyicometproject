@@ -7,12 +7,7 @@ module "eks" {
 
   bootstrap_self_managed_addons = false
 
-  cluster_addons = {
-    coredns                = {}
-   #eks-pod-identity-agent = {}
-    kube-proxy             = {}
-    vpc-cni                = {}
-  }
+  cluster_addons = var.cluster_addons
 
   cluster_endpoint_public_access = true
 

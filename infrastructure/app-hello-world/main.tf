@@ -1,3 +1,4 @@
+## implement the recommended fixes for the IAM role modules first before proqceeding with this
 module "iam" {
   source = "./modules/iam"
 
@@ -16,6 +17,9 @@ module "iam" {
   tags = var.tags
 }
 
+
+##no network module created, create one using aws  vpc module
+## just saw the VPC module, it is solid, use it, you can take out this one here
 module "network" {
   source = "./modules/network"
 
@@ -26,13 +30,15 @@ module "network" {
   tags            = var.tags
 }
 
+#this is solid
+
 module "eks" {
   source = "./modules/eks"
 
   cluster_name              = var.cluster_name
   region                    = var.region
   vpc_id                    = module.network.vpc_id
-  subnet_ids                = module.network.private_subnet_ids
+  subnet_ids                = module.network.private_subnet_ids// make sure you create network module
   control_plane_subnet_ids  = module.network.private_subnet_ids
 
   cluster_role_arn          = module.iam.eks_cluster_role_arn

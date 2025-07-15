@@ -29,3 +29,15 @@ variable "tags" {
   type        = map(string)
   default     = {}
 }
+
+variable "cluster_addons" {
+  description = "Map of EKS cluster addons to enable"
+  type        = map(any)
+  default     = {
+    coredns                = {}
+    eks-pod-identity-agent = {}
+    kube-proxy             = {}
+    vpc-cni                = {}
+  }
+  
+}

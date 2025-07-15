@@ -18,145 +18,147 @@ module "vpc" {
     }
 }
 
-provider "aws" {
-  region = var.region
-}
 
-resource "aws_vpc" "main" {
-  cidr_block           = var.vpc_cidr
-  enable_dns_support   = true
-  enable_dns_hostnames = true
+##only use the module the rest is redundant
+# provider "aws" {
+#   region = var.region
+# }
 
-  tags = merge(var.tags, {
-    Name = "comet-base-vpc"
-  })
-}
+# resource "aws_vpc" "main" {
+#   cidr_block           = var.vpc_cidr
+#   enable_dns_support   = true
+#   enable_dns_hostnames = true
 
-resource "aws_internet_gateway" "igw" {
-  vpc_id = aws_vpc.main.id
+#   tags = merge(var.tags, {
+#     Name = "comet-base-vpc"
+#   })
+# }
 
-  tags = merge(var.tags, {
-    Name = "comet-igw"
-  })
-}
+# resource "aws_internet_gateway" "igw" {
+#   vpc_id = aws_vpc.main.id
 
-# Public subnets
-resource "aws_subnet" "public" {
-  count = length(var.public_subnets)
+#   tags = merge(var.tags, {
+#     Name = "comet-igw"
+#   })
+# }
 
-  vpc_id                  = aws_vpc.main.id
-  cidr_block              = var.public_subnets[count.index]
-  availability_zone       = element(data.aws_availability_zones.available.names, count.index)
-  map_public_ip_on_launch = true
+# # Public subnets
+# resource "aws_subnet" "public" {
+#   count = length(var.public_subnets)
 
-  tags = merge(var.tags, {
-    Name = "comet-public-subnet-${count.index + 1}"
-  })
-}
+#   vpc_id                  = aws_vpc.main.id
+#   cidr_block              = var.public_subnets[count.index]
+#   availability_zone       = element(data.aws_availability_zones.available.names, count.index)
+#   map_public_ip_on_launch = true
 
-# Private subnets
-resource "aws_subnet" "private" {
-  count = length(var.private_subnets)
+#   tags = merge(var.tags, {
+#     Name = "comet-public-subnet-${count.index + 1}"
+#   })
+# }
 
-  vpc_id            = aws_vpc.main.id
-  cidr_block        = var.private_subnets[count.index]
-  availability_zone = element(data.aws_availability_zones.available.names, count.index)
+# # Private subnets
+# resource "aws_subnet" "private" {
+#   count = length(var.private_subnets)
 
-  tags = merge(var.tags, {
-    Name = "comet-private-subnet-${count.index + 1}"
-  })
-}
+#   vpc_id            = aws_vpc.main.id
+#   cidr_block        = var.private_subnets[count.index]
+#   availability_zone = element(data.aws_availability_zones.available.names, count.index)
 
-# NAT Gateway (Optional)
-resource "aws_eip" "nat" {
-  count = length(var.private_subnets) > 0 ? 1 : 0
+#   tags = merge(var.tags, {
+#     Name = "comet-private-subnet-${count.index + 1}"
+#   })
+# }
 
-  vpc = true
+# # NAT Gateway (Optional)
+# resource "aws_eip" "nat" {
+#   count = length(var.private_subnets) > 0 ? 1 : 0
 
-  tags = merge(var.tags, {
-    Name = "comet-nat-eip"
-  })
-}
+#   vpc = true
 
-resource "aws_nat_gateway" "nat" {
-  count = length(var.private_subnets) > 0 ? 1 : 0
+#   tags = merge(var.tags, {
+#     Name = "comet-nat-eip"
+#   })
+# }
 
-  allocation_id = aws_eip.nat[0].id
-  subnet_id     = aws_subnet.public[0].id
+# resource "aws_nat_gateway" "nat" {
+#   count = length(var.private_subnets) > 0 ? 1 : 0
 
-  tags = merge(var.tags, {
-    Name = "comet-nat-gateway"
-  })
-}
+#   allocation_id = aws_eip.nat[0].id
+#   subnet_id     = aws_subnet.public[0].id
 
-# Public route table
-resource "aws_route_table" "public" {
-  vpc_id = aws_vpc.main.id
+#   tags = merge(var.tags, {
+#     Name = "comet-nat-gateway"
+#   })
+# }
 
-  route {
-    cidr_block = "0.0.0.0/0"
-    gateway_id = aws_internet_gateway.igw.id
-  }
+# # Public route table
+# resource "aws_route_table" "public" {
+#   vpc_id = aws_vpc.main.id
 
-  tags = merge(var.tags, {
-    Name = "comet-public-rt"
-  })
-}
+#   route {
+#     cidr_block = "0.0.0.0/0"
+#     gateway_id = aws_internet_gateway.igw.id
+#   }
 
-resource "aws_route_table_association" "public" {
-  count = length(aws_subnet.public)
+#   tags = merge(var.tags, {
+#     Name = "comet-public-rt"
+#   })
+# }
 
-  subnet_id      = aws_subnet.public[count.index].id
-  route_table_id = aws_route_table.public.id
-}
+# resource "aws_route_table_association" "public" {
+#   count = length(aws_subnet.public)
 
-# Private route table (uses NAT)
-resource "aws_route_table" "private" {
-  count = length(var.private_subnets) > 0 ? 1 : 0
+#   subnet_id      = aws_subnet.public[count.index].id
+#   route_table_id = aws_route_table.public.id
+# }
 
-  vpc_id = aws_vpc.main.id
+# # Private route table (uses NAT)
+# resource "aws_route_table" "private" {
+#   count = length(var.private_subnets) > 0 ? 1 : 0
 
-  route {
-    cidr_block     = "0.0.0.0/0"
-    nat_gateway_id = aws_nat_gateway.nat[0].id
-  }
+#   vpc_id = aws_vpc.main.id
 
-  tags = merge(var.tags, {
-    Name = "comet-private-rt"
-  })
-}
+#   route {
+#     cidr_block     = "0.0.0.0/0"
+#     nat_gateway_id = aws_nat_gateway.nat[0].id
+#   }
 
-resource "aws_route_table_association" "private" {
-  count = length(aws_subnet.private)
+#   tags = merge(var.tags, {
+#     Name = "comet-private-rt"
+#   })
+# }
 
-  subnet_id      = aws_subnet.private[count.index].id
-  route_table_id = aws_route_table.private[0].id
-}
+# resource "aws_route_table_association" "private" {
+#   count = length(aws_subnet.private)
 
-# Basic security group for networking
-resource "aws_security_group" "base_sg" {
-  name        = "comet-base-sg"
-  description = "Base security group allowing basic traffic"
-  vpc_id      = aws_vpc.main.id
+#   subnet_id      = aws_subnet.private[count.index].id
+#   route_table_id = aws_route_table.private[0].id
+# }
 
-  ingress {
-    description = "Allow SSH"
-    from_port   = 22
-    to_port     = 22
-    protocol    = "tcp"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
+# # Basic security group for networking
+# resource "aws_security_group" "base_sg" {
+#   name        = "comet-base-sg"
+#   description = "Base security group allowing basic traffic"
+#   vpc_id      = aws_vpc.main.id
 
-  egress {
-    from_port   = 0
-    to_port     = 0
-    protocol    = "-1"
-    cidr_blocks = ["0.0.0.0/0"]
-  }
+#   ingress {
+#     description = "Allow SSH"
+#     from_port   = 22
+#     to_port     = 22
+#     protocol    = "tcp"
+#     cidr_blocks = ["0.0.0.0/0"]
+#   }
 
-  tags = merge(var.tags, {
-    Name = "comet-base-sg"
-  })
-}
+#   egress {
+#     from_port   = 0
+#     to_port     = 0
+#     protocol    = "-1"
+#     cidr_blocks = ["0.0.0.0/0"]
+#   }
 
-data "aws_availability_zones" "available" {}
+#   tags = merge(var.tags, {
+#     Name = "comet-base-sg"
+#   })
+# }
+
+# data "aws_availability_zones" "available" {}

@@ -5,7 +5,7 @@ terraform {
     dynamodb_table = "tfstatelockcomet"
     key = "envs/dev/terraform.tfstate"
     region = "us-east-2"
-    // encrypt = true (Create KMS key)
+    // encrypt = true (Create KMS key) // can use aws default key for this, removes need for CMK
   }
 
   required_providers {

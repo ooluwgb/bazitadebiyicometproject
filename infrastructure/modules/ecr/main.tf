@@ -1,22 +1,24 @@
-resource "aws_ecr_repository" "comet_repo" {
-  for_each = var.repositories
+#can also use aws ecr module here, abstracts alot of complexity
 
-  name                 = each.key
-  image_tag_mutability = "MUTABLE" # or "IMMUTABLE"
+resource "aws_ecr_repository" "this" {
+  //for_each = var.repositories // redunant
+
+  name                 =  var.name //each.key
+  image_tag_mutability = "IMMUTABLE" // keeps tags from being overwritten
 
   image_scanning_configuration {
-    scan_on_push = each.value.image_scan_on_push
+    scan_on_push = true
   }
 
   tags = merge(var.tags, {
-    Name = each.key
+    Name = var.name //replacement for each.key
   })
 }
 
 resource "aws_ecr_lifecycle_policy" "this" {
   for_each = var.repositories
 
-  repository = aws_ecr_repository.this[each.key].name
+  repository = aws.aws_ecr_repository.this//aws_ecr_repository.this[each.key].name
 
   policy = jsonencode({
     rules = [
@@ -26,7 +28,7 @@ resource "aws_ecr_lifecycle_policy" "this" {
         selection = {
           tagStatus     = "any"
           countType     = "imageCountMoreThan"
-          countNumber   = each.value.max_image_count
+          countNumber   = 10 //- find a good number to put here
         }
         action = {
           type = "expire"
@@ -35,3 +37,6 @@ resource "aws_ecr_lifecycle_policy" "this" {
     ]
   })
 }
+
+
+#you don't need the for_each for the ecr repo, unneccesary complexity, should be one repo per app
