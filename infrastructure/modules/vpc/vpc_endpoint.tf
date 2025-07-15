@@ -1,15 +1,3 @@
-variable "vpc_endpoints" {
-  description = "Map of VPC interface endpoints to create"
-  type = map(object({
-    service             = string
-    subnet_ids          = list(string)
-    security_group_ids  = list(string)
-    private_dns_enabled = bool
-    tags                = map(string)
-  }))
-  default = {}
-}
-
 resource "aws_vpc_endpoint" "this" {
   for_each = var.vpc_endpoints
 
@@ -42,16 +30,6 @@ resource "aws_vpc_endpoint" "gateway" {
     {
       Name = "${each.key}-gateway-endpoint"
     },
-    each.value.tags
+    var.tags
   )
 }
-
-variable "gateway_endpoints" {
-  description = "Map of VPC gateway endpoints to create"
-  type = map(object({
-    service = string
-    tags    = map(string)
-  }))
-  default = {}
-}
-
