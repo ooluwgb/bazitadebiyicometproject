@@ -19,15 +19,15 @@ module "eks" {
   enable_cluster_creator_admin_permissions = true
 
   vpc_id                   = var.vpc_id
-  subnet_ids               = ["subnet-aaa111", "subnet-bbb222", "subnet-ccc333"] #change 
-  control_plane_subnet_ids = ["subnet-xxx999", "subnet-yyy888", "subnet-zzz777"] #change
+  subnet_ids               = var.subnet_ids
+  control_plane_subnet_ids = var.control_plane_subnet_ids
 
   eks_managed_node_group_defaults = {
     instance_types = ["t3.medium", "t3.large"]
   }
 
   eks_managed_node_groups = {
-    self_managed_nodes = {
+    managed_nodes = {
       ami_type       = "AL2023_x86_64_STANDARD"
       instance_types = ["t3.large"]
 
