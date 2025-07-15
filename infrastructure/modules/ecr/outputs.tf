@@ -1,15 +1,9 @@
 output "repository_urls" {
   description = "Map of ECR repository URLs"
-  value = {
-    for repo, details in aws_ecr_repository.this :
-    repo => details.repository_url
-  }
+  value = aws_ecr_repository.this.repository_url
 }
 
-output "repository_arns" {
+output "repository_name" {
   description = "Map of ECR repository ARNs"
-  value = {
-    for repo, details in aws_ecr_repository.this :
-    repo => details.arn
-  }
+  value = aws_ecr_repository.this.name
 }

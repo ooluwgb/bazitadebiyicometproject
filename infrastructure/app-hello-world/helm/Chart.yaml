@@ -1,6 +1,6 @@
-apiVersion: v2
-name: hello-world
-description: A simple Hello World deployment for the Comet project
-type: application
-version: 0.1.0
-appVersion: "1.0.0"
+# apiVersion: v2
+# name: hello-world
+# description: A simple Hello World deployment for the Comet project
+# type: application
+# version: 0.1.0
+# appVersion: "1.0.0"

@@ -1,34 +1,16 @@
-variable "repositories" {
-  description = <<EOT
-A map of ECR repositories to create.
-
-Example:
-{
-  "app1" = {
-    image_scan_on_push = true
-    max_image_count    = 10
-  },
-  "app2" = {
-    image_scan_on_push = false
-    max_image_count    = 20
-  }
+variable "name" {
+  description = "Name of the ECR repository"
+  type        = string
 }
-EOT
-  type = map(object({
-    image_scan_on_push = bool
-    max_image_count    = number
-  }))
+
+variable "lifecycle_count" {
+  description = "Number of images to keep in ECR lifecycle policy"
+  type        = number
+  default     = null
 }
 
 variable "tags" {
-  description = "Tags to apply to all ECR repositories"
+  description = "Tags to apply to ECR resources"
   type        = map(string)
   default     = {}
-}
-
-variable "name" {
-  description = "The name of the ECR repository"
-  type        = string
-  default     = null
-  
 }
