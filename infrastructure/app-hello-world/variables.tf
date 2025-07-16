@@ -1,1 +1,0 @@
-// there should be no variables.tf in you app directory, all variables should be in the module directories

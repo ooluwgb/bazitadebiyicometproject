@@ -6,7 +6,7 @@ variable "name" {
 variable "cluster_version" {
   description = "Kubernetes version for the EKS cluster"
   type        = string
-  default     = "1.33"
+  default     = "1.29"
 }
 
 variable "vpc_id" {
@@ -40,4 +40,14 @@ variable "cluster_addons" {
     vpc-cni                = {}
   }
   
+}
+
+variable "cluster_role_arn" {
+  description = "IAM role ARN for the EKS cluster"
+  type        = string
+}
+
+variable "node_group_role_arn" {
+  description = "IAM role ARN for the node group"
+  type        = string
 }

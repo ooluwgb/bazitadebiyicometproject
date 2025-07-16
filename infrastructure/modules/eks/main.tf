@@ -29,6 +29,8 @@ module "eks" {
       min_size     = 2
       max_size     = 5
       desired_size = 2
+
+      iam_role_arn = var.node_group_role_arn
     }
   }
 
