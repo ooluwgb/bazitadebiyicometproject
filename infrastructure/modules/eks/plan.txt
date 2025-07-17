@@ -1,9 +1,0 @@
-var.cluster_role_arn
-  IAM role ARN for the EKS cluster
-
-  Enter a value: 
-
-Interrupt received.
-Please wait for Terraform to exit or data loss may occur.
-Gracefully shutting down...
-

@@ -21,9 +21,10 @@ provider "aws" {
 
   default_tags {
     tags = {
-      Environment = "dev"
-      Project     = "comet"
-      Owner       = "Bazit"
+    managed_by = "terraform",
+    environment = "Production",
+    project = "Comet",
+    owner = "Bazit Adebiyi"
     }
   }
 }
