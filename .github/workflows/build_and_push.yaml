@@ -31,8 +31,8 @@ jobs:
           pip install pytest
 
       - name: Run Tests
+        working-directory: hello-basit-comet
         run: |
-          cd hello-basit-comet
           pytest -v
 
   build:
