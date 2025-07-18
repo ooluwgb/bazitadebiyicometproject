@@ -66,7 +66,7 @@ jobs:
           BRANCH_TAG: ${{ github.ref_name }}-${{ github.sha }}
         run: |
           cd hello-basit-comet
-          docker build \
+          docker build -f Dockerfile \
             -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG \
             -t $ECR_REGISTRY/$ECR_REPOSITORY:latest \
             -t $ECR_REGISTRY/$ECR_REPOSITORY:$BRANCH_TAG .
