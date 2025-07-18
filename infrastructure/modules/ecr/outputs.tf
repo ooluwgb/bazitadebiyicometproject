@@ -1,3 +1,3 @@
 output "name" {
-  value = module
+  value = aws_ecr_repository.this.name
 }
