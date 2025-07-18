@@ -68,6 +68,8 @@ jobs:
         with:
           role-to-assume: arn:aws:iam::690893780650:role/gh_depolyer #make sure you import to tf
           aws-region: us-east-2
+          role-session-name: gha-debug-session
+          debug-credentials: true
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
