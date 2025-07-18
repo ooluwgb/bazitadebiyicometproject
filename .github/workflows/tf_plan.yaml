@@ -37,7 +37,9 @@ jobs:
 
       - name: Terraform Plan
         id: plan
-        run: terraform plan -no-color | tee plan.txt
+        run: |
+          terraform plan -no-color -out=tfplan
+          terraform show -no-color tfplan > plan.txt
 
       - name: Post Plan to PR
         uses: marocchino/sticky-pull-request-comment@v2
