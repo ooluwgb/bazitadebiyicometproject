@@ -1,0 +1,80 @@
+
+name: Terraform Apply upon Approval
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  plan-after-merge:
+    name: Terraform Plan (Post-Merge)
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      contents: read
+
+    outputs:
+      plan-status: ${{ steps.plan.outcome }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::690893780650:role/gh_depolyer 
+          aws-region: us-east-2
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.7.5
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Plan
+        id: plan
+        run: terraform plan -no-color > plan.txt
+
+      - name: Upload Plan Output
+        uses: actions/upload-artifact@v4
+        with:
+          name: tfplan
+          path: plan.txt
+
+  apply-with-approval:
+    name: Terraform Apply (Requires Manual Approval)
+    needs: plan-after-merge
+    runs-on: ubuntu-latest
+    environment:
+      name: production  
+
+    steps:
+      - name: Download Plan Artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: tfplan
+
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::690893780650:role/gh_depolyer #make sure you import to tf
+          aws-region: us-east-2
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.7.5
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Apply
+        run: terraform apply -auto-approve

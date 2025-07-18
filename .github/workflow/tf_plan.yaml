@@ -1,0 +1,42 @@
+name: Terraform Plan on PR
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  terraform-plan:
+    runs-on: ubuntu-latest
+
+    permissions:
+      id-token: write
+      contents: read
+      pull-requests: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Configure AWS credentials (OIDC)
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: arn:aws:iam::690893780650:role/gh_depolyer #to be imported to terraform
+          aws-region: us-east-2
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.7.5
+
+      - name: Terraform Init
+        run: terraform init
+
+      - name: Terraform Plan
+        id: plan
+        run: terraform plan -no-color | tee plan.txt
+
+      - name: Post Plan to PR
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          path: plan.txt
