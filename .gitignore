@@ -12,3 +12,7 @@ override.tf.json
 .terraform.lock.hcl
 terraform.tfvars
 terraform.tfvars.json
+
+# Python
+__pycache__/
+.pytest_cache/
