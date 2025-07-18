@@ -1,7 +1,7 @@
 name: CI/CD - Build and Push to ECR
 
 on:
-  workflow_dispatch:   #to run manual tests remove later
+  #workflow_dispatch:   #to run manual tests remove later
   push:
     branches: [ "main" ]
     paths:
