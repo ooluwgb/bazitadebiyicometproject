@@ -1,13 +1,18 @@
 module "comet_eks" {
   source = "../modules/eks"
 
-  name                        = "comet-eks"
-  vpc_id                      = data.aws_vpc.comet_vpc.id
-  subnet_ids                  = data.aws_subnets.comet_subnets.ids
-  control_plane_subnet_ids    = data.aws_subnets.comet_control_plane_subnets.ids
-  cluster_version             = "1.32"
-  node_group_role_arn         = "arn:aws:iam::690893780650:role/aws-service-role/support.amazonaws.com/AWSServiceRoleForSupport"
-  create_cloudwatch_log_group = false
+  name                     = "comet-eks"
+  vpc_id                   = data.aws_vpc.comet_vpc.id
+  subnet_ids               = data.aws_subnets.comet_subnets.ids
+  control_plane_subnet_ids = data.aws_subnets.comet_control_plane_subnets.ids
+  cluster_version          = "1.32"
+  node_group_role_arn      = "arn:aws:iam::690893780650:role/aws-service-role/support.amazonaws.com/AWSServiceRoleForSupport"
+  # Enable creation of the EKS log group in CloudWatch so control plane logs are
+  # automatically stored.  If an old log group exists from a previous run you
+  # can remove it via the AWS console or using the AWS CLI
+  #   aws logs delete-log-group --log-group-name /aws/eks/comet-eks/cluster
+  # before applying this configuration.
+  create_cloudwatch_log_group = true
   #eks_managed_node_group_defaults = ["t3.medium"]
 
   eks_managed_node_groups = {
