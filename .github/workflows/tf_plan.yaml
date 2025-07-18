@@ -34,9 +34,11 @@ jobs:
 
       - name: Terraform Init
         run: terraform init
+        working-directory: infrastructure/app-hello-basit-comet
 
       - name: Terraform Plan
         id: plan
+        working-directory: infrastructure/app-hello-basit-comet
         run: |
           terraform plan -no-color -out=tfplan
           terraform show -no-color tfplan > plan.txt
