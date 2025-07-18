@@ -6,14 +6,15 @@ on:
     branches:
       - main
 
+permissions:
+      id-token: write
+      contents: read
+      
 jobs:
   plan-after-merge:
     name: Terraform Plan (Post-Merge)
     runs-on: ubuntu-latest
 
-    permissions:
-      id-token: write
-      contents: read
 
     outputs:
       plan-status: ${{ steps.plan.outcome }}
