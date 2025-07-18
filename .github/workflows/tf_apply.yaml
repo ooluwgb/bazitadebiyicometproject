@@ -1,22 +1,21 @@
-
 name: Terraform Apply upon Approval
 
 on:
   push:
     branches:
       - main
+
 env:
   AWS_REGION: us-east-2
 
 permissions:
-      id-token: write
-      contents: read
+  id-token: write
+  contents: read
 
 jobs:
   plan-after-merge:
     name: Terraform Plan (Post-Merge)
     runs-on: ubuntu-latest
-
 
     outputs:
       plan-status: ${{ steps.plan.outcome }}
@@ -39,32 +38,35 @@ jobs:
 
       - name: Terraform Init
         run: terraform init
+        working-directory: infrastructure/app-hello-basit-comet
 
       - name: Terraform Plan
         id: plan
         run: terraform plan -no-color > plan.txt
+        working-directory: infrastructure/app-hello-basit-comet
 
       - name: Upload Plan Output
         uses: actions/upload-artifact@v4
         with:
           name: tfplan
-          path: plan.txt
+          path: infrastructure/app-hello-basit-comet/plan.txt
 
   apply-with-approval:
     name: Terraform Apply (Requires Manual Approval)
     needs: plan-after-merge
     runs-on: ubuntu-latest
     environment:
-      name: production  
+      name: production
 
     steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
       - name: Download Plan Artifact
         uses: actions/download-artifact@v4
         with:
           name: tfplan
-
-      - name: Checkout
-        uses: actions/checkout@v4
+          path: infrastructure/app-hello-basit-comet
 
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
@@ -80,6 +82,8 @@ jobs:
 
       - name: Terraform Init
         run: terraform init
+        working-directory: infrastructure/app-hello-basit-comet
 
       - name: Terraform Apply
-        run: terraform apply -auto-approve
+        run: terraform apply -auto-approve plan.txt
+        working-directory: infrastructure/app-hello-basit-comet
