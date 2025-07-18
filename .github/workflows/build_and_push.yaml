@@ -10,6 +10,9 @@ on:
     branches: [ "main" ]
     paths:
       - 'hello-comet/**'
+env:
+  AWS_REGION: us-east-2
+  #ECR_REPOSITORY: bazitadebiyicometproject/hello-basit-comet
 
 jobs:
   test:
