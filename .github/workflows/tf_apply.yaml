@@ -40,6 +40,10 @@ jobs:
         run: terraform init
         working-directory: infrastructure/app-hello-basit-comet
 
+      - name: Terraform Refresh
+        run: terraform refresh
+        working-directory: infrastructure/app-hello-basit-comet
+
       - name: Terraform Plan
         id: plan
         run: |
