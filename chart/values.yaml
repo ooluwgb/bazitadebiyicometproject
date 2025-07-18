@@ -6,9 +6,9 @@ image:
   tag: "latest"
 
 service:
-  type: ClusterIP
+  type: LoadBalancer
   port: 80
-  targetPort: 8080
+  targetPort: 5000
 
 ingress:
   enabled: false
@@ -41,9 +41,9 @@ env:
 livenessProbe:
   enabled: true
   path: /healthz
-  port: 8080
+  port: 5000
 
 readinessProbe:
   enabled: true
-  path: /readyz
-  port: 8080
+  path: /healthz
+  port: 5000
