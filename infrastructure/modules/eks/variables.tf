@@ -96,3 +96,9 @@ variable "ebs_csi_driver_role" {
 # }
 
 
+
+variable "create_cloudwatch_log_group" {
+  description = "Whether to create the CloudWatch log group for EKS"
+  type        = bool
+  default     = false
+}
