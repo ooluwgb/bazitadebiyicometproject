@@ -1,4 +1,4 @@
-module "eks" {
+module "comet_eks" {
   source = "../modules/eks"
 
   name              = "comet-eks"
@@ -28,4 +28,11 @@ module "eks" {
       }
     }
   }
+}
+
+module "comet_ecr" {
+  source = "../modules/ecr"
+
+  name = "comet-ecr"
+  
 }

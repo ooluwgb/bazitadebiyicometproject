@@ -22,26 +22,13 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
-      - name: Get OIDC Token
-        id: oidc
-        run: |
-          echo "Requesting OIDC token from GitHub..."
-          export REQUEST_URL="${ACTIONS_ID_TOKEN_REQUEST_URL}&audience=sts.amazonaws.com"
-          export ID_TOKEN=$(curl -s -H "Authorization: bearer $ACTIONS_ID_TOKEN_REQUEST_TOKEN" "$REQUEST_URL" | jq -r .value)
-          if [ -z "$ID_TOKEN" ]; then
-            echo "OIDC token is empty. Check that 'id-token: write' is set at the top-level permissions block."
-            exit 1
-          fi
-          echo "::add-mask::$ID_TOKEN"
-          echo "id_token=$ID_TOKEN" >> $GITHUB_OUTPUT
 
-      - name: Configure AWS credentials (OIDC)
-        uses: aws-actions/configure-aws-credentials@v4
+      - name: Configure AWS credentials
+        uses: aws-actions/configure-aws-credentials@v2
         with:
-          role-to-assume: arn:aws:iam::690893780650:role/gh_depolyer 
-          aws-region: us-east-2
-          role-session-name: gha-debug-session
-          debug-credentials: true
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
@@ -77,13 +64,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Configure AWS credentials (OIDC)
-        uses: aws-actions/configure-aws-credentials@v4
+      - name: Configure AWS Credentials
+        uses: aws-actions/configure-aws-credentials@v2
         with:
-          role-to-assume: arn:aws:iam::690893780650:role/gh_depolyer #make sure you import to tf
-          aws-region: us-east-2
-          role-session-name: gha-debug-session
-          debug-credentials: true
+          aws-access-key-id: ${{ secrets.AWS_ACCESS_KEY_ID }}
+          aws-secret-access-key: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+          aws-region: ${{ env.AWS_REGION }}
 
       - name: Setup Terraform
         uses: hashicorp/setup-terraform@v3
