@@ -16,6 +16,7 @@ module "eks" {
   cluster_security_group_name        = var.name
   cluster_security_group_description = "${var.name} EKS cluster security group."
   cluster_enabled_log_types          = var.cluster_enabled_log_types
+  create_cloudwatch_log_group        = var.create_cloudwatch_log_group
   control_plane_subnet_ids           = var.control_plane_subnet_ids
   cluster_endpoint_public_access_cidrs = var.additional_cluster_endpoint_public_access_cidrs
   #cluster_role_arn                  = var.cluster_role_arn
