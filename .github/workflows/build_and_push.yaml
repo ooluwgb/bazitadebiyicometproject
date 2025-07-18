@@ -33,7 +33,7 @@ jobs:
       - name: Run Tests
         working-directory: hello-basit-comet
         run: |
-          PYTHONPATH=src pytest -v
+          PYTHONPATH=. pytest -v
 
   build:
     runs-on: ubuntu-latest
