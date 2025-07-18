@@ -1,7 +1,9 @@
 import pytest
 import os, sys
 
-sys.path.append(os.path.abspath("./src"))  # Adjust path to include src 
+sys.path.append(
+    os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+)  # Adjust path to include project root relative to this file
 
 @pytest.fixture
 def client():
