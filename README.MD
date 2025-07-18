@@ -2,6 +2,7 @@
 
 This repository contains a simple Flask web service and supporting Terraform infrastructure.
 It also includes GitHub Actions workflows for building, testing and deploying the application.
+Helm charts are provided to deploy the application on an EKS cluster.
 
 ## Project Structure
 
@@ -35,3 +36,22 @@ The project uses GitHub Actions with three workflows:
 - **tf_apply.yaml** – after merging to `main`, runs a plan and waits for manual approval to apply
 
 These workflows automate testing and infrastructure provisioning.
+
+## Deploying with Helm
+
+The `chart/` directory contains a Helm chart for deploying the Flask application
+to an Amazon EKS cluster. The default values expose the service using a
+`LoadBalancer` so the application is reachable over the internet.
+
+To install the chart:
+
+```bash
+helm install my-app ./chart \
+  --set image.repository=<your-docker-image>
+```
+
+After deployment, the external address can be obtained via:
+
+```bash
+kubectl get svc my-app-bazitadebiyicometproject
+```

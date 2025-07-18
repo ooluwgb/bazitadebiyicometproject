@@ -6,11 +6,11 @@ on:
       - main
 env:
   AWS_REGION: us-east-2
-  
+
 permissions:
-      id-token: write
-      contents: read
-      pull-requests: write
+  id-token: write
+  contents: read
+  pull-requests: write
 
 jobs:
   terraform-plan:
@@ -46,4 +46,4 @@ jobs:
       - name: Post Plan to PR
         uses: marocchino/sticky-pull-request-comment@v2
         with:
-          path: plan.txt
+          path: infrastructure/app-hello-basit-comet/plan.txt
