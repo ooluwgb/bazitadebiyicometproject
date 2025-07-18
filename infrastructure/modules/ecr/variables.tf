@@ -14,3 +14,8 @@ variable "tags" {
   type        = map(string)
   default     = {}
 }
+
+variable "snapshot" {
+  type    = bool
+  default = false
+}
