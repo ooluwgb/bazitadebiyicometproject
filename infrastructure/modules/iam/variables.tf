@@ -1,44 +1,34 @@
-variable "role_name" {
-  description = "The name of the iam role"
-}
-
-variable "policy_arns" {
-  description = "The policy ARNs to be attached to the role"
-  type        = list(string)
-  default     = []
-}
-
-variable "inline_policy" {
-  description = "Inline policy to be attached to the role"
-  default     = ""
-}
-
-variable "max_session_duration" {
-  type        = number
-  description = "(Optional) The maximum session duration (in seconds) that you want to set for the specified role. If you do not specify a value for this setting, the default maximum of one hour is applied. This setting can have a value from 1 hour to 12 hours."
-  default     = 3600
-}
-
-
-variable "assume_role_policy" {
-  description = "The trust relationship"
-  default     = ""
-}
-
-variable "principals" {
-  type        = list(string)
-  description = "List of arns"
-  default     = []
-}
-
-variable "path" {
+variable "cluster_name" {
+  description = "Name of the EKS cluster"
   type        = string
-  description = "The path to the role"
-  default     = "/"
 }
 
 variable "tags" {
-  description = "A map of tags to add the the IAM role"
-  type        = map(any)
+  description = "Tags to apply to all IAM resources"
+  type        = map(string)
   default     = {}
+}
+
+variable "enable_irsa" {
+  description = "Whether to create an IAM OIDC provider and IRSA role"
+  type        = bool
+  default     = false
+}
+
+variable "irsa_service_account" {
+  description = "Name of the service account for IRSA"
+  type        = string
+  default     = "comet-irsa-sa"
+}
+
+variable "irsa_namespace" {
+  description = "Namespace of the IRSA service account"
+  type        = string
+  default     = "default"
+}
+
+variable "irsa_policy_json" {
+  description = "JSON IAM policy document for the IRSA role"
+  type        = string
+  default     = ""
 }
