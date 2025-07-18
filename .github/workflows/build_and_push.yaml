@@ -32,7 +32,7 @@ jobs:
 
       - name: Run Tests
         run: |
-          cd hello-comet
+          cd hello-basit-comet
           pytest -v
 
   build:
