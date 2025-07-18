@@ -5,11 +5,11 @@ on:
   push:
     branches: [ "main" ]
     paths:
-      - 'hello-comet/**'
+      - 'hello-basit-comet/**'
   pull_request:
     branches: [ "main" ]
     paths:
-      - 'hello-comet/**'
+      - 'hello-basit-comet/**'
 env:
   AWS_REGION: us-east-2
   #ECR_REPOSITORY: bazitadebiyicometproject/hello-basit-comet
@@ -30,7 +30,7 @@ jobs:
         run: |
           cd hello-basit-comet
           python -m pip install --upgrade pip
-          pip install -r requirements.txt || true
+          pip install -r requirements.txt
           pip install pytest
 
       - name: Run Tests
