@@ -42,14 +42,18 @@ jobs:
 
       - name: Terraform Plan
         id: plan
-        run: terraform plan -no-color > plan.txt
+        run: |
+          terraform plan -no-color -out=tfplan
+          terraform show -no-color tfplan > plan.txt
         working-directory: infrastructure/app-hello-basit-comet
 
       - name: Upload Plan Output
         uses: actions/upload-artifact@v4
         with:
           name: tfplan
-          path: infrastructure/app-hello-basit-comet/plan.txt
+          path: |
+            infrastructure/app-hello-basit-comet/tfplan
+            infrastructure/app-hello-basit-comet/plan.txt
 
   apply-with-approval:
     name: Terraform Apply (Requires Manual Approval)
@@ -85,5 +89,5 @@ jobs:
         working-directory: infrastructure/app-hello-basit-comet
 
       - name: Terraform Apply
-        run: terraform apply -auto-approve plan.txt
+        run: terraform apply -auto-approve tfplan
         working-directory: infrastructure/app-hello-basit-comet
