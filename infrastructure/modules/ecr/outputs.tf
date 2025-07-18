@@ -1,4 +1,3 @@
-output "repository_urls" {
-  description = "Map of ECR repository URLs"
-  value = module.ecr.repository_urls
+output "name" {
+  value = aws_ecr_repository.this.name
 }
