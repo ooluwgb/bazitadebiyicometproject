@@ -4,6 +4,7 @@ on:
   pull_request:
     branches:
       - main
+
 env:
   AWS_REGION: us-east-2
 
@@ -16,10 +17,10 @@ jobs:
   terraform-plan:
     runs-on: ubuntu-latest
 
-
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
@@ -36,12 +37,16 @@ jobs:
         run: terraform init
         working-directory: infrastructure/app-hello-basit-comet
 
+      - name: Terraform Refresh
+        run: terraform refresh
+        working-directory: infrastructure/app-hello-basit-comet
+
       - name: Terraform Plan
         id: plan
-        working-directory: infrastructure/app-hello-basit-comet
         run: |
           terraform plan -no-color -out=tfplan
           terraform show -no-color tfplan > plan.txt
+        working-directory: infrastructure/app-hello-basit-comet
 
       - name: Post Plan to PR
         uses: marocchino/sticky-pull-request-comment@v2
