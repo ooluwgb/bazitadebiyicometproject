@@ -60,6 +60,11 @@ resource "aws_iam_role_policy_attachment" "node_CNI" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonEKSCNIPolicy"
 }
 
+resource "aws_iam_role_policy_attachment" "node_ssm" {
+  role       = aws_iam_role.eks_node_group.name
+  policy_arn = "arn:aws:iam::aws:policy/AmazonSSMManagedInstanceCore"
+}
+
 resource "aws_iam_openid_connect_provider" "this" {
   count = var.enable_irsa ? 1 : 0
 
