@@ -35,7 +35,7 @@ The project uses GitHub Actions with three workflows:
 - **tf_plan.yaml** – runs `terraform plan` on pull requests and posts the result to the PR
 - **tf_apply.yaml** – after merging to `main`, runs a plan and waits for manual approval to apply
 
-These workflows automate testing and infrastructure provisioning.
+These workflows automate testing and infrastructure provisioning in aws.
 
 ## Deploying with Helm
 
