@@ -5,7 +5,7 @@ module "comet_eks" {
   vpc_id                                          = data.aws_vpc.comet_vpc.id
   subnet_ids                                      = data.aws_subnets.comet_subnets.ids
   control_plane_subnet_ids                        = data.aws_subnets.comet_control_plane_subnets.ids
-  cluster_version                                 = "1.29"
+  cluster_version                                 = "1.32"
   cluster_endpoint_public_access                  = true
   cluster_endpoint_private_access                 = true
   additional_cluster_endpoint_public_access_cidrs = ["0.0.0.0/0"]
