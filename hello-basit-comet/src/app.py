@@ -30,6 +30,7 @@ def greeting():
         return f"<h1>{message}</h1>"
 
 
+
 @app.route("/healthz", methods=["GET"])
 def healthz():
     # health check endpoint
