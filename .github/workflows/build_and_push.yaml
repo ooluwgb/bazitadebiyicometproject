@@ -12,7 +12,7 @@ on:
       - 'hello-basit-comet/**'
 env:
   AWS_REGION: us-east-2
-  ECR_REPOSITORY: bazitadebiyicometproject/hello-basit-comet
+  ECR_REPOSITORY: comet-ecr 
 
 jobs:
   test:
