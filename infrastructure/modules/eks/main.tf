@@ -71,7 +71,7 @@ module "eks" {
       launch_template_use_name_prefix = true
       min_size                        = var.active ? v.min_size : 0
       desired_size                    = var.active ? v.desired_size : 0
-      iam_role_arn                    = coalesce(v.iam_role_arn, var.node_group_role_arn)
+      iam_role_arn                    = var.node_group_role_arn
     })
   }
   tags = var.tags
