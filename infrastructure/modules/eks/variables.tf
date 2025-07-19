@@ -6,7 +6,25 @@ variable "name" {
 variable "cluster_version" {
   description = "Kubernetes version for the EKS cluster"
   type        = string
-  default     = "1.32"
+  default     = "1.29"
+}
+
+variable "cluster_endpoint_public_access" {
+  description = "Whether the cluster endpoint should be publicly accessible"
+  type        = bool
+  default     = true
+}
+
+variable "cluster_endpoint_private_access" {
+  description = "Whether the cluster endpoint should be privately accessible"
+  type        = bool
+  default     = true
+}
+
+variable "kms_key_arn" {
+  description = "KMS key ARN used for cluster secrets encryption"
+  type        = string
+  default     = null
 }
 
 variable "vpc_id" {
@@ -32,15 +50,16 @@ variable "tags" {
 
 
 variable "node_group_role_arn" {
-  description = "IAM role ARN for the node group"
+  description = "IAM role ARN applied to all managed node groups"
   type        = string
+  default     = null
 }
 
 variable "active" {
   description = "Flag to indicate if the EKS cluster addons should be active"
   type        = bool
   default     = true
-  
+
 }
 
 variable "coredns_autoscaling_values" {
@@ -83,7 +102,7 @@ variable "eks_managed_node_groups" {
 variable "ebs_csi_driver_role" {
   description = "IAM role for the EBS CSI driver"
   type        = any
-  default     = {
+  default = {
     iam_role_arn = ""
     iam_role_id  = ""
   }
