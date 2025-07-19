@@ -52,7 +52,7 @@ variable "coredns_autoscaling_values" {
 variable "additional_cluster_endpoint_public_access_cidrs" {
   description = "Additional CIDRs for public access to the EKS cluster endpoint"
   type        = list(string)
-  default     = []
+  default     = ["0.0.0.0/0"]
 }
 
 variable "enable_pod_eni" {

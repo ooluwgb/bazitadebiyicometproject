@@ -15,7 +15,6 @@ def home():
         </form>
     """
 
-
 @app.route("/greeting", methods=["GET"])
 def greeting():
     name = request.args.get(
@@ -28,6 +27,7 @@ def greeting():
         return jsonify({"message": message})
     else:
         return f"<h1>{message}</h1>"
+
 
 
 @app.route("/healthz", methods=["GET"])
