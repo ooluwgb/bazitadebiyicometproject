@@ -15,7 +15,6 @@ def home():
         </form>
     """
 
-
 @app.route("/greeting", methods=["GET"])
 def greeting():
     name = request.args.get(
